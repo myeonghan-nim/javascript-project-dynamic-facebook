@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 
 {% block body %}
+
   <h1>Index</h1>
+
   {% for post in posts %}
     <p>{{post.user.username}}</p>
     <p>{{post.title}}</p>
@@ -21,6 +23,7 @@
       btn.addEventListener('click', (e) => {
         const postId = e.target.dataset.id
         
+        // axios with POST
         axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
         axios.defaults.xsrfCookieName = 'csrftoken'
         axios.defaults.xsrfHeaderName = 'X-CSRFToken'
@@ -77,4 +80,5 @@
       })
     })
   </script>
+  
 {% endblock %}
