@@ -1,4 +1,6 @@
-# Javascript with Django
+# README
+
+## Events in HTML with JS
 
 ```javascript
 const likeBtns = document.querySelectorAll('.fa-heart')
@@ -25,6 +27,5 @@ from django.http import JsonResponse
 
 
 def like(request, id):
-
     return JsonResponse({'message': 'is it right?'})
 ```
