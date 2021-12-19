@@ -1,44 +1,39 @@
 {% extends 'base.html' %}
 
 {% block body %}
-
   <h1>Index</h1>
-
   {% for post in posts %}
     <p>{{post.user.username}}</p>
     <p>{{post.title}}</p>
     <p><span id="count-{{post.id}}">{{post.like_users.count}} user</span> liked this post</p>
     {% if user in post.like_users.all %}
-      <i class="fas fa-heart" data-id="{{post.id}}"></i>
+      <p class="like" data-id="{{post.id}}">🤍</p>
     {% else %}
-      <i class="far fa-heart" data-id="{{post.id}}"></i>
+      <p class="like" data-id="{{post.id}}">❤️</p>
     {% endif %}
     <hr>
   {% endfor %}
 
   <script>
-    const likeBtns = document.querySelectorAll('.fa-heart')
+    const likeBtns = document.querySelectorAll('.like')
 
     likeBtns.forEach((btn) => {
       btn.addEventListener('click', (e) => {
         const postId = e.target.dataset.id
-        
-        // axios with POST
+
         axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
         axios.defaults.xsrfCookieName = 'csrftoken'
         axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 
         axios.post(`/posts/${postId}/like/`)
-            .then((response) => {
-              if (response.data.is_like) {
-                e.target.classList.remove('far')
-                e.target.classList.add('fas')
+            .then((res) => {
+              if (res.data.is_like) {
+                e.target.innerText = '🤍'
               } else {
-                e.target.classList.remove('fas')
-                e.target.classList.add('far')
+                e.target.innerText = '❤️'
               }
 
-              const likeUsers = response.data.like_users
+              const likeUsers = res.data.like_users
               const likeSpan = document.querySelector(`#count-${postId}`)
 
               if (likeUsers >= 2) {
@@ -47,38 +42,10 @@
                 likeSpan.innerText = `${likeUsers} user`
               }
             })
-            .catch((error) => {
-              console.log(error)
+            .catch((err) => {
+              console.log(err)
             })
-
-        /* axios with GET
-        // 1. send like api to django
-        axios.get(`/posts/${postId}/like/`)
-            // 2. return response
-            .then((response) => {
-              if (response.data.is_like) {
-                e.target.classList.remove('far')
-                e.target.classList.add('fas')
-              } else {
-                e.target.classList.remove('fas')
-                e.target.classList.add('far')
-              }
-
-              const likeUsers = response.data.like_users
-              const likeSpan = document.querySelector(`#count-${postId}`)
-
-              if (likeUsers >= 2) {
-                likeSpan.innerText = `${likeUsers} users`
-              } else {
-                likeSpan.innerText = `${likeUsers} user`
-              }
-            })
-            .catch((error) => {
-              console.log(error)
-            })
-        */
       })
     })
   </script>
-  
 {% endblock %}
