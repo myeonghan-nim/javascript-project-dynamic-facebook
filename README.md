@@ -1,25 +1,24 @@
-# README
+# Project: facebook
 
-## Events in HTML with JS
+## POST and GET event
 
 ```javascript
 const likeBtns = document.querySelectorAll('.fa-heart')
+  likeBtns.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      const postId = e.target.dataset.id
 
-    likeBtns.forEach((btn) => {
-      btn.addEventListener('click', (e) => {
-        const postId = e.target.dataset.id
-        
-        axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
-        axios.defaults.xsrfCookieName = 'csrftoken'
-        axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+      axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+      axios.defaults.xsrfCookieName = 'csrftoken'
+      axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 
-        axios.post(`/posts/${postId}/like/`)
-            .then((response) => {
-              console.log(response)
-            })
-            .catch((error) => {
-              console.log(error)
-            })
+      axios.post(`/posts/${postId}/like/`)
+        .then((res) => {
+          console.log(res)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
 ```
 
 ```python
@@ -27,5 +26,5 @@ from django.http import JsonResponse
 
 
 def like(request, id):
-    return JsonResponse({'message': 'is it right?'})
+    return JsonResponse({'message': 'A event has occurred.'})
 ```
